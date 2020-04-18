@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:i_caf/common/Screen.dart';
+import 'package:i_caf/common/routes/RouteWidgets.dart';
 import 'package:i_caf/common/routes/Router.dart';
 import 'package:i_caf/components/LoginFormField.dart';
+import 'package:i_caf/components/dialog/ConfigAlertDialog.dart';
+import 'package:i_caf/components/RouteTranistion.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -117,6 +120,10 @@ class _LoginPageState extends State<LoginPage> {
               iconSrc: 'assets/images/login/sname@3x.png',
               placeholder: '请选择经销商',
               fieldWidth: itemWidth,
+              onTap: () async {
+                final action = await ConfigAlertDialog.alert(context, '主机设置');
+                print(action);
+              },
             ),
             LoginFormField(
               iconSrc: 'assets/images/login/username@3x.png',

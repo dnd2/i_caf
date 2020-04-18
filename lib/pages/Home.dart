@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:i_caf/common/Screen.dart';
 import 'package:i_caf/components/MenuNavPanel.dart';
 
+/// FAQ: Multiple widgets used the same GlobalKey"： 
+/// 1. 检查以下同一个GlobalKey有没有被多处使用
+/// 2. 检查route(路由)是否正确，也就是同一个路由是否被push了两次
+/// 3. https://github.com/flutter/flutter/issues/24660
 class HomePage extends StatefulWidget {
   @override
   State<HomePage>createState() => HomePageState();
@@ -82,6 +86,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
         elevation: 0.0,
       ),
       body: SingleChildScrollView(
+        physics: ClampingScrollPhysics(), // 禁止回弹效果
         child: Container(
           color: Color(0xFFF5F5F5),
           child: Column(

@@ -53,6 +53,7 @@ flutter:
      - assets/images/
      - assets/images/login/
      - assets/images/home/
+     - assets/images/list/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

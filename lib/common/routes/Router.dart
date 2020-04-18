@@ -4,11 +4,8 @@ import 'package:i_caf/components/RouteTranistion.dart';
 class Router {
   
   static Map<String, Widget> getRoutes() {
-    final LoginPage defaultPage = new LoginPage();
-
     return <String, Widget>{
-      '/': defaultPage,
-      'login': defaultPage,
+      '/': LoginPage(),
       'home': HomePage(),
     };
   }
