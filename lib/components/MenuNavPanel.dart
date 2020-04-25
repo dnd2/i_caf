@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:i_caf/common/Screen.dart';
+import 'package:i_caf/common/routes/Router.dart';
 /// Event callback triggered when the navigation item will be clicked.
 typedef NavItemGestureTapCallBack = void Function();
 
@@ -15,7 +16,7 @@ class MenuNavPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Screen.init(context);
-    _initData();
+    _initData(context);
 
     return Container(
       width: navWidth,
@@ -114,7 +115,7 @@ class MenuNavPanel extends StatelessWidget {
 
   Widget _menuItems(MenuNavItem item) {
     return GestureDetector(
-      onTap: () => item.callback,
+      onTap: () => item.callback(),
       child: Container(
         width: navItemWidth,
         child: Stack(
@@ -162,14 +163,14 @@ class MenuNavPanel extends StatelessWidget {
     );
   }
 
-  void _initData() {
+  void _initData(BuildContext context) {
     this.navItems.addAll([
       MenuNavItem(
           title: '潜客跟进',
           icon: 'assets/images/home/potential_cus.png',
           memo: '已完成',
           extra: 3621,
-          tipValue: 500, callback: () => {}),
+          tipValue: 500, callback: () => Navigator.push(context, Router.redirectTo('potiential_cus'))),
       MenuNavItem(
           title: '保客回访',
           icon: 'assets/images/home/retain_cus.png',

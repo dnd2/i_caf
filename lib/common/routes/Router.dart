@@ -7,6 +7,7 @@ class Router {
     return <String, Widget>{
       '/': LoginPage(),
       'home': HomePage(),
+      'potiential_cus': PotientialCusPage(),
     };
   }
   
