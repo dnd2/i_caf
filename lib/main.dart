@@ -1,5 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:i_caf/pages/Login.dart';
+
+import 'pages/Login.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,17 +30,43 @@ class MyApp extends StatelessWidget {
         // This makes the visual density adapt to the platform that you run
         // the app on. For desktop platforms, the controls will be smaller and
         // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+       // visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       //initialRoute: '/',
       home: Center(
         child: CustomPaint(
           size: Size(300, 300),
-          painter: MyPainter()
+          painter: LineProgressBar()
         )
-      )//LoginPage(),
+      )
     );
   }
+}
+
+class LineProgressBar extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    List<Offset> points = [
+      Offset(0,0),
+      Offset(30,50),
+      Offset(20,80),
+      Offset(100, 40),
+      Offset(150, 90),
+      Offset(60, 110),
+      Offset(260, 160),
+    ];
+    var paint = Paint()
+      ..color = Color(0xffff0000)
+      ..strokeWidth = 4
+      ..style = PaintingStyle.stroke
+      ..isAntiAlias = true;
+    canvas.drawPoints(PointMode.polygon, points, paint);
+    canvas.drawLine(Offset(30,30), Offset(100,170), paint);
+    canvas.drawRRect(RRect.fromLTRBAndCorners(10, 6, 200, 20), paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
 
 class MyPainter extends CustomPainter {
