@@ -1,10 +1,14 @@
 import 'dart:ui';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:i_caf/pages/Login.dart';
 
 import 'pages/Login.dart';
+import 'package:i_caf/components/ui/progressbar/CircleProgressBar.dart';
 
+/// 版本冲突： https://juejin.im/post/5b8958d351882542b03e6d57
+/// stream： https://juejin.im/post/5e9b6aacf265da47bd1bb0d9
 void main() {
   runApp(MyApp());
 }
@@ -33,15 +37,109 @@ class MyApp extends StatelessWidget {
        // visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       //initialRoute: '/',
-      home: Center(
-        child: CustomPaint(
-          size: Size(300, 300),
-          painter: LineProgressBar()
-        )
-      )
+      home: StreamCounter()
     );
   }
 }
+
+class StreamCounter extends StatefulWidget {
+  @override
+  _StreamCounterState createState() => _StreamCounterState();
+}
+
+class _StreamCounterState extends State<StreamCounter> {
+  StreamController<int> _counterStreamController = StreamController<int>(
+    onCancel: () {
+      print('cancel');
+    },
+    onListen: () {
+      print('listen');
+    }
+  );
+  int _counter = 0;
+  Stream _counterStream;
+  StreamSink _counterSink;
+
+  void _incrementCounter() {
+    if (_counter > 9) {
+      _counterSink.close();
+      return;
+    }
+    _counter++;
+    _counterSink.add(_counter);
+  }
+  
+
+  void _closeStream() {
+    _counterStreamController.close();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _counterSink = _counterStreamController.sink;
+    _counterStream = _counterStreamController.stream;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _counterSink.close();
+    _counterStreamController.close();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Stream Counter'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('You have pushed the button this many times.'),
+            StreamBuilder<int>(
+              stream: _counterStream,
+              initialData: _counter,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return Text(
+                    'Done',
+                    style: Theme.of(context).textTheme.body1,
+                  );
+                }
+
+                int number = snapshot.data;
+                return Text(
+                  '$number',
+                  style: Theme.of(context).textTheme.body2,
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          FloatingActionButton(
+            onPressed: _incrementCounter,
+            tooltip: 'Increment',
+            child: Icon(Icons.add),
+          ),
+          SizedBox(width: 24.0),
+          FloatingActionButton(
+            onPressed: _closeStream,
+            tooltip: 'Close',
+            child: Icon(Icons.close),
+          )
+        ],
+      ),
+    );
+  }
+}
+
 
 class LineProgressBar extends CustomPainter {
   @override
